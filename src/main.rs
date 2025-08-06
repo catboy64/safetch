@@ -63,6 +63,17 @@ fn parse_content_with_end_char(content: String, starting_point: i8, starting_cha
     panic!("Error: couldn't parse content. (fn:parse_content_with_end_char)");
 }
 
+
+fn better_parse(content:String, info_title:&str) -> String {
+    for line in content.lines() {
+        let line_vector: Vec<&str> = line.split('=').collect();
+        if line_vector[0] == info_title {
+            return format!("{}", line_vector[1]);
+        }
+    }
+    return String::from("");
+}
+
 fn get_uptime(content: String) -> String{
     // special function to parse for uptime
 
@@ -140,7 +151,9 @@ fn main() {
     let mut hostname = read_file("/etc/hostname");
     hostname.pop();
     let os_name = parse_content(read_file("/etc/os-release"), 1, '"');
-    let os_id = parse_content_with_end_char(read_file("/etc/os-release"), 3, '=', '\n');
+
+    //let os_id = parse_content_with_end_char(read_file("/etc/os-release"), 3, '=', '\n');
+    let os_id = better_parse(read_file("/etc/os-release"), "ID");
 
     let distro_color: String =  match os_id.as_str() {
         "arch" => format!("{CYAN}"),
@@ -252,3 +265,4 @@ fn print_info(username:String, hostname:String, os_name:String, os_id:String, di
     }
     println!("{COLOR_END}");
 }
+
