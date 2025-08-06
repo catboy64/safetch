@@ -92,20 +92,21 @@ fn i_love_numbers(content: String) -> String {
 fn separator(place:u8) -> String {
     let length = 10;
     let mut bar = String::from("");
+    bar.push_str("\x1b[0m");
     return match place {
-        0 => {bar.push_str("\x1b[0m┌");
+        0 => {bar.push_str("┌");
         for _x in 0..length-1 {
             bar.push_str("─");
         }
         bar.push_str("┐");
         bar},
-        1 => {bar.push_str("\x1b[0m├");
+        1 => {bar.push_str("├");
         for _x in 0..length-1 {
             bar.push_str("─");
         }
         bar.push_str("┤");
         bar},
-        2 => {bar.push_str("\x1b[0m└");
+        2 => {bar.push_str("└");
         for _x in 0..length-1 {
             bar.push_str("─");
         }
