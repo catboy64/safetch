@@ -18,9 +18,11 @@ fn read_file(path:&str) -> String {
     use std::fs;
 
     let file_path = String::from(path);
-    let content = fs::read_to_string(file_path)
-        .expect("failed to read the file {file_path}");
-    
+
+    let content =  match fs::read_to_string(file_path) {
+        Ok(x) => x,
+        Err(_) => String::from(""),
+    };
     content
 }
 
@@ -106,11 +108,11 @@ fn separator(place:u8) -> String {
     let mut bar = String::from("");
     bar.push_str("\x1b[0m");
     return match place {
-        0 => {bar.push_str("┌");
+        0 => {bar.push_str("╭");
         for _x in 0..length-1 {
             bar.push_str("─");
         }
-        bar.push_str("┐");
+        bar.push_str("╮");
         bar},
         1 => {bar.push_str("├");
         for _x in 0..length-1 {
@@ -118,11 +120,11 @@ fn separator(place:u8) -> String {
         }
         bar.push_str("┤");
         bar},
-        2 => {bar.push_str("└");
+        2 => {bar.push_str("╰");
         for _x in 0..length-1 {
             bar.push_str("─");
         }
-        bar.push_str("┘");
+        bar.push_str("╯");
         bar},
         _ => String::from("Nothing ever happens."),
     };
@@ -149,8 +151,7 @@ fn get_mem_used(mem_total: String, mem_avail: String) -> String {
 
 fn main() {
     let username = env::var("LOGNAME").unwrap();
-    let mut hostname = read_file("/etc/hostname");
-    hostname.pop();
+
     let os_name = os_release_parse(read_file("/etc/os-release"), "PRETTY_NAME");
     let os_id = os_release_parse(read_file("/etc/os-release"), "ID");
     //let os_id = String::from("qubes"); // for testing purposes.
@@ -175,6 +176,18 @@ fn main() {
         &_ => format!("{COLOR_END}"),
     };
 
+    // hostname 
+    let mut hostname = read_file("/etc/hostname");
+    if hostname.as_str() != "" {
+        hostname.pop();
+    } else {
+        hostname = read_file("/etc/conf.d/hostname"); //f u gentoo
+        if hostname.as_str() != "" {
+            hostname.pop();
+        } else {
+            hostname = os_id.clone()
+        }
+    }
 
     let kernel_version = parse_content(read_file("/proc/version"), 2, ' '); 
     let uptime_str = get_uptime(read_file("/proc/uptime"));
