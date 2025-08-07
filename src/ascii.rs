@@ -196,7 +196,7 @@ pub fn get_ascii(os_id: &str) -> String {
                 {COLOR_END}
 "),
       "gentoo" => return format!("
-{PURPLE}         -/oyddmdhs+:.        {COLOR_END}
+{PURPLE}         -/oyddmdhs+:.               {COLOR_END}
 {PURPLE}     -o{WHITE}dNMMMMMMMMNNmhy+{PURPLE}-`            {COLOR_END}
 {PURPLE}   -y{WHITE}NMMMMMMMMMMMNNNmmdhy{PURPLE}+-          {COLOR_END}
 {PURPLE} `o{WHITE}mMMMMMMMMMMMMNmdmmmmddhhy{PURPLE}/`       {COLOR_END}
