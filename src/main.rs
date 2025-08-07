@@ -66,7 +66,7 @@ fn parse_content_with_end_char(content: String, starting_point: i8, starting_cha
 }
 
 
-fn os_release_parse(content:String, info_title:&str) -> String {
+fn better_parse(content:String, info_title:&str) -> String {
     for line in content.lines() {
         let line_vector: Vec<&str> = line.split('=').collect();
         if line_vector[0] == info_title {
@@ -152,8 +152,8 @@ fn get_mem_used(mem_total: String, mem_avail: String) -> String {
 fn main() {
     let username = env::var("LOGNAME").unwrap();
 
-    let os_name = os_release_parse(read_file("/etc/os-release"), "PRETTY_NAME");
-    let os_id = os_release_parse(read_file("/etc/os-release"), "ID");
+    let os_name = better_parse(read_file("/etc/os-release"), "PRETTY_NAME");
+    let os_id = better_parse(read_file("/etc/os-release"), "ID");
     //let os_id = String::from("qubes"); // for testing purposes.
 
     let distro_color: String =  match os_id.as_str() {
@@ -181,7 +181,7 @@ fn main() {
     if hostname.as_str() != "" {
         hostname.pop();
     } else {
-        hostname = read_file("/etc/conf.d/hostname"); //f u gentoo
+        hostname = better_parse(read_file("/etc/conf.d/hostname"), "hostname"); //f u gentoo
         if hostname.as_str() != "" {
             hostname.pop();
         } else {
