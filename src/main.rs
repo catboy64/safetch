@@ -64,11 +64,12 @@ fn parse_content_with_end_char(content: String, starting_point: i8, starting_cha
 }
 
 
-fn better_parse(content:String, info_title:&str) -> String {
+fn os_release_parse(content:String, info_title:&str) -> String {
     for line in content.lines() {
         let line_vector: Vec<&str> = line.split('=').collect();
         if line_vector[0] == info_title {
-            return format!("{}", line_vector[1]);
+            let info = format!("{}", line_vector[1]);
+            return str::replace(info.as_str(), "\"", "");
         }
     }
     return String::from("");
@@ -150,10 +151,9 @@ fn main() {
     let username = env::var("LOGNAME").unwrap();
     let mut hostname = read_file("/etc/hostname");
     hostname.pop();
-    let os_name = parse_content(read_file("/etc/os-release"), 1, '"');
-
-    //let os_id = parse_content_with_end_char(read_file("/etc/os-release"), 3, '=', '\n');
-    let os_id = better_parse(read_file("/etc/os-release"), "ID");
+    let os_name = os_release_parse(read_file("/etc/os-release"), "PRETTY_NAME");
+    let os_id = os_release_parse(read_file("/etc/os-release"), "ID");
+    //let os_id = String::from("qubes"); // for testing purposes.
 
     let distro_color: String =  match os_id.as_str() {
         "arch" => format!("{CYAN}"),
@@ -165,6 +165,13 @@ fn main() {
         "ubuntu" => format!("{RED}"),
         "slackware" => format!("{BLUE}"),
         "paran" => format!("{PURPLE}"),
+        "gentoo" => format!("{PURPLE}"),
+        "nixos" => format!("{CYAN}"),
+        "opensuse" => format!("{GREEN}"),
+        "endeavouros" => format!("{PURPLE}"),
+        "trisquel" => format!("{CYAN}"),
+        "void" => format!("{GREEN}"),
+        "qubes" => format!("{BLUE}"),
         &_ => format!("{COLOR_END}"),
     };
 
@@ -265,4 +272,3 @@ fn print_info(username:String, hostname:String, os_name:String, os_id:String, di
     }
     println!("{COLOR_END}");
 }
-
