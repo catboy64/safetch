@@ -195,6 +195,148 @@ pub fn get_ascii(os_id: &str) -> String {
                 {COLOR_END}
                 {COLOR_END}
 "),
+      "gentoo" => return format!("
+{PURPLE}         -/oyddmdhs+:.        {COLOR_END}
+{PURPLE}     -o{WHITE}dNMMMMMMMMNNmhy+{PURPLE}-`            {COLOR_END}
+{PURPLE}   -y{WHITE}NMMMMMMMMMMMNNNmmdhy{PURPLE}+-          {COLOR_END}
+{PURPLE} `o{WHITE}mMMMMMMMMMMMMNmdmmmmddhhy{PURPLE}/`       {COLOR_END}
+{PURPLE} om{WHITE}MMMMMMMMMMMN{PURPLE}hhyyyo{WHITE}hmdddhhhd{PURPLE}o`     {COLOR_END}
+{PURPLE}.y{WHITE}dMMMMMMMMMMd{PURPLE}hs++so/s{WHITE}mdddhhhhdm{PURPLE}+`   {COLOR_END}
+{PURPLE} oy{WHITE}hdmNMMMMMMMN{PURPLE}dyooy{WHITE}dmddddhhhhyhN{PURPLE}d.  {COLOR_END}
+{PURPLE}  :o{WHITE}yhhdNNMMMMMMMNNNmmdddhhhhhyym{PURPLE}Mh  {COLOR_END}
+{PURPLE}    .:{WHITE}+sydNMMMMMNNNmmmdddhhhhhhmM{PURPLE}my  {COLOR_END}
+{PURPLE}       /m{WHITE}MMMMMMNNNmmmdddhhhhhmMNh{PURPLE}s:  {COLOR_END}
+{PURPLE}    `o{WHITE}NMMMMMMMNNNmmmddddhhdmMNhs{PURPLE}+`   {COLOR_END}
+{PURPLE}  `s{WHITE}NMMMMMMMMNNNmmmdddddmNMmhs{PURPLE}/.     {COLOR_END}
+{PURPLE} /N{WHITE}MMMMMMMMNNNNmmmdddmNMNdso{PURPLE}:`       {COLOR_END}
+{PURPLE}+M{WHITE}MMMMMMNNNNNmmmmdmNMNdso{PURPLE}/-          {COLOR_END}
+{PURPLE}yM{WHITE}MNNNNNNNmmmmmNNMmhs+/{PURPLE}-`            {COLOR_END}
+{PURPLE}/h{WHITE}MMNNNNNNNNMNdhs++/{PURPLE}-`               {COLOR_END}
+{PURPLE}`/{WHITE}ohdmmddhys+++/:{PURPLE}.`                  {COLOR_END}
+{PURPLE}  `-//////:--.                                      {COLOR_END}"),
+
+      "nixos" => return format!("
+{BLUE}          ▗▄▄▄       {CYAN}▗▄▄▄▄    ▄▄▄▖                {COLOR_END}
+{BLUE}          ▜███▙       {CYAN}▜███▙  ▟███▛                {COLOR_END}
+{BLUE}           ▜███▙       {CYAN}▜███▙▟███▛                 {COLOR_END}
+{BLUE}            ▜███▙       {CYAN}▜██████▛                  {COLOR_END}
+{BLUE}     ▟█████████████████▙ {CYAN}▜████▛     {BLUE}▟▙            {COLOR_END}
+{BLUE}    ▟███████████████████▙ {CYAN}▜███▙    {BLUE}▟██▙           {COLOR_END}
+{CYAN}           ▄▄▄▄▖           ▜███▙  {BLUE}▟███▛           {COLOR_END}
+{CYAN}          ▟███▛             ▜██▛ {BLUE}▟███▛            {COLOR_END}
+{CYAN}         ▟███▛               ▜▛ {BLUE}▟███▛             {COLOR_END}
+{CYAN}▟███████████▛                  {BLUE}▟██████████▙       {COLOR_END}
+{CYAN}▜██████████▛                  {BLUE}▟███████████▛       {COLOR_END}
+{CYAN}      ▟███▛ {BLUE}▟▙               ▟███▛                {COLOR_END}
+{CYAN}     ▟███▛ {BLUE}▟██▙             ▟███▛                 {COLOR_END}
+{CYAN}    ▟███▛  {BLUE}▜███▙           ▝▀▀▀▀                  {COLOR_END}
+{CYAN}    ▜██▛    {BLUE}▜███▙ {CYAN}▜██████████████████▛      {COLOR_END}
+{CYAN}     ▜▛     {BLUE}▟████▙ {CYAN}▜████████████████▛        {COLOR_END}
+{BLUE}           ▟██████▙       {CYAN}▜███▙                   {COLOR_END}
+{BLUE}          ▟███▛▜███▙       {CYAN}▜███▙                  {COLOR_END}
+{BLUE}         ▟███▛  ▜███▙       {CYAN}▜███▙                 {COLOR_END}
+{BLUE}         ▝▀▀▀    ▀▀▀▀▘       {CYAN}▀▀▀▘                 {COLOR_END}"),
+
+      "opensuse" => return format!("
+{WHITE}           .;ldkO0000Okdl;.              {COLOR_END}
+{WHITE}       .;d00xl:^''''''^:ok00d;.          {COLOR_END}
+{WHITE}     .d00l'                'o00d.        {COLOR_END}
+{WHITE}   .d0Kd'{GREEN}  Okxol:;,.          {WHITE}:O0d.      {COLOR_END}
+{WHITE}  .OK{GREEN}KKK0kOKKKKKKKKKKOxo:,      {WHITE}lKO.     {COLOR_END}
+{WHITE} ,0K{GREEN}KKKKKKKKKKKKKKK0P^{WHITE},,,{GREEN}^dx:{WHITE}    ;00,    {COLOR_END}
+{WHITE}.OK{GREEN}KKKKKKKKKKKKKKKk'{WHITE}.oOPPb.{GREEN}'0k.{WHITE}   cKO.   {COLOR_END}
+{WHITE}:KK{GREEN}KKKKKKKKKKKKKKK: {WHITE}kKx..dd {GREEN}lKd{WHITE}   'OK:   {COLOR_END}
+{WHITE}dKK{GREEN}KKKKKKKKKOx0KKKd {WHITE}^0KKKO' {GREEN}kKKc{WHITE}   dKd   {COLOR_END}
+{WHITE}dKK{GREEN}KKKKKKKKKK;.;oOKx,..{WHITE}^{GREEN}..;kKKK0.{WHITE}  dKd   {COLOR_END}
+{WHITE}:KK{GREEN}KKKKKKKKKK0o;...^cdxxOK0O/^^'  {WHITE}.0K:   {COLOR_END}
+{WHITE} kKK{GREEN}KKKKKKKKKKKKK0x;,,......,;od  {WHITE}lKk    {COLOR_END}
+{WHITE} '0K{GREEN}KKKKKKKKKKKKKKKKKKKK00KKOo^  {WHITE}c00'    {COLOR_END}
+{WHITE}  'kK{GREEN}KKOxddxkOO00000Okxoc;''   {WHITE}.dKk'     {COLOR_END}
+{WHITE}    l0Ko.                    .c00l'            {COLOR_END}
+{WHITE}     'l0Kk:.              .;xK0l'              {COLOR_END}
+{WHITE}        'lkK0xl:;,,,,;:ldO0kl'                 {COLOR_END}
+{WHITE}            '^:ldxkkkkxdl:^'                   {COLOR_END}"),
+
+      "endeavouros" => return format!("
+{RED}                     ./{PURPLE}o{BLUE}.                {COLOR_END}
+{RED}                   ./{PURPLE}sssso{BLUE}-              {COLOR_END}
+{RED}                 `:{PURPLE}osssssss+{BLUE}-            {COLOR_END}
+{RED}               `:+{PURPLE}sssssssssso{BLUE}/.          {COLOR_END}
+{RED}             `-/o{PURPLE}ssssssssssssso{BLUE}/.        {COLOR_END}
+{RED}           `-/+{PURPLE}sssssssssssssssso{BLUE}+:`      {COLOR_END}
+{RED}         `-:/+{PURPLE}sssssssssssssssssso{BLUE}+/.     {COLOR_END}
+{RED}       `.://o{PURPLE}sssssssssssssssssssso{BLUE}++-    {COLOR_END}
+{RED}      .://+{PURPLE}ssssssssssssssssssssssso{BLUE}++:   {COLOR_END}
+{RED}    .:///o{PURPLE}ssssssssssssssssssssssssso{BLUE}++:  {COLOR_END}
+{RED}  `:////{PURPLE}ssssssssssssssssssssssssssso{BLUE}+++. {COLOR_END}
+{RED}`-////+{PURPLE}ssssssssssssssssssssssssssso{BLUE}++++- {COLOR_END}
+{RED} `..-+{PURPLE}oosssssssssssssssssssssssso{BLUE}+++++/` {COLOR_END}
+{BLUE}   ./++++++++++++++++++++++++++++++/:.                {COLOR_END}
+{BLUE}  `:::::::::::::::::::::::::------``                  {COLOR_END}"),
+      
+      "trisquel" => return format!("
+{CYAN}                         ▄▄▄▄▄▄           {COLOR_END}
+ {CYAN}                     ▄█████████▄         {COLOR_END}
+{CYAN}      ▄▄▄▄▄▄         ████▀   ▀████        {COLOR_END}
+{CYAN}   ▄██████████▄     ████▀   ▄▄ ▀███       {COLOR_END}
+{CYAN} ▄███▀▀   ▀▀████     ███▄   ▄█   ███      {COLOR_END}
+{CYAN}▄███   ▄▄▄   ████▄    ▀██████   ▄███      {COLOR_END}
+{CYAN}███   █▀▀██▄  █████▄     ▀▀   ▄████       {COLOR_END}
+{CYAN}▀███      ███  ███████▄▄  ▄▄██████        {COLOR_END}
+{CYAN} ▀███▄   ▄███  █████████████{BLUE}████▀         {COLOR_END}
+{CYAN}  ▀█████████    ███████{BLUE}███▀▀▀             {COLOR_END}
+{CYAN}    ▀▀███▀▀     {BLUE}██████▀▀                  {COLOR_END}
+{BLUE}               ██████▀   ▄▄▄▄             {COLOR_END}
+{BLUE}              █████▀   ████████           {COLOR_END}
+{BLUE}              █████   ███▀  ▀███          {COLOR_END}
+{BLUE}               ████▄   ██▄▄▄  ███         {COLOR_END}
+{BLUE}                █████▄   ▀▀  ▄██          {COLOR_END}
+{BLUE}                  ██████▄▄▄████           {COLOR_END}
+{BLUE}                     ▀▀█████▀▀            {COLOR_END}"),
+
+      "void" => return format!("
+{GREEN}                __.;=====;.__                  {COLOR_END}
+{GREEN}            _.=+==++=++=+=+===;.               {COLOR_END}
+{GREEN}             -=+++=+===+=+=+++++=_             {COLOR_END}
+{GREEN}        .     -=:``     `--==+=++==.           {COLOR_END}
+{GREEN}       _vi,    `            --+=++++:          {COLOR_END}
+{GREEN}      .uvnvi.       _._       -==+==+.         {COLOR_END}
+{GREEN}     .vvnvnI`    .;==|==;.     :|=||=|.        {COLOR_END}
+{WHITE}+QmQQm{GREEN}pvvnv; {WHITE}_yYsyQQWUUQQQm #QmQ#{GREEN}:{WHITE}QQQWUV$QQm.  {COLOR_END}
+{WHITE} -QQWQW{GREEN}pvvo{WHITE}wZ?.wQQQE{GREEN}==<{WHITE}QWWQ/QWQW.QQWW{GREEN}(: {WHITE}jQWQE  {COLOR_END}
+{WHITE}  -$QQQQmmU'  jQQQ@{GREEN}+=<{WHITE}QWQQ)mQQQ.mQQQC{GREEN}+;{WHITE}jWQQ@'  {COLOR_END}
+{WHITE}   -$WQ8Y{GREEN}nI:   {WHITE}QWQQwgQQWV{GREEN}`{WHITE}mWQQ.jQWQQgyyWW@!    {COLOR_END}
+{GREEN}     -1vvnvv.     `~+++`        ++|+++         {COLOR_END}
+{GREEN}      +vnvnnv,                 `-|===          {COLOR_END}
+{GREEN}       +vnvnvns.           .      :=-          {COLOR_END}
+{GREEN}        -Invnvvnsi..___..=sv=.     `           {COLOR_END}
+{GREEN}          +Invnvnvnnnnnnnnvvnn;.               {COLOR_END}
+{GREEN}            ~|Invnvnvvnvvvnnv}}+`              {COLOR_END}
+{GREEN}               -~|{{*l}}*|~                    {COLOR_END}"),
+
+      "qubes" => return format!("
+{BLUE}               `..--..`                   {COLOR_END}
+{BLUE}            `.----------.`                {COLOR_END}
+{BLUE}        `..----------------..`            {COLOR_END}
+{BLUE}     `.------------------------.``        {COLOR_END}
+{BLUE} `..-------------....-------------..`     {COLOR_END}
+{BLUE}.::----------..``    ``..----------:+:    {COLOR_END}
+{BLUE}:////:----..`            `..---:/ossso    {COLOR_END}
+{BLUE}:///////:`                  `/osssssso    {COLOR_END}
+{BLUE}:///////:                    /ssssssso    {COLOR_END}
+{BLUE}:///////:                    /ssssssso    {COLOR_END}
+{BLUE}:///////:                    /ssssssso    {COLOR_END}
+{BLUE}:///////:                    /ssssssso    {COLOR_END}
+{BLUE}:///////:                    /ssssssso    {COLOR_END}
+{BLUE}:////////-`                .:sssssssso    {COLOR_END}
+{BLUE}:///////////-.`        `-/osssssssssso    {COLOR_END}
+{BLUE}`//////////////:-```.:+ssssssssssssso-    {COLOR_END}
+{BLUE}  .-://////////////sssssssssssssso/-`     {COLOR_END}
+{BLUE}     `.:///////////sssssssssssssso:.      {COLOR_END}
+{BLUE}         .-:///////ssssssssssssssssss/`   {COLOR_END}
+{BLUE}            `.:////ssss+/+ssssssssssss.   {COLOR_END}
+{BLUE}                `--//-    `-/osssso/.     {COLOR_END}"),
+
 
         _       => return String::from("distro not supported (yet)"),
     }
