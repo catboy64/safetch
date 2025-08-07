@@ -183,7 +183,6 @@ fn main() {
     } else {
         hostname = better_parse(read_file("/etc/conf.d/hostname"), "hostname"); //f u gentoo
         if hostname.as_str() != "" {
-            hostname.pop();
         } else {
             hostname = os_id.clone()
         }
