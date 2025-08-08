@@ -3,5 +3,4 @@
 a neofetch-like software written in rust!
 
 to install:
-$ cargo build --release
-$ cp target/release/safetch /usr/bin
+$ cargo build --release;cp target/release/safetch /usr/bin
