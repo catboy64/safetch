@@ -1,4 +1,5 @@
-<img width="874" height="426" alt="safetch_2" src="https://github.com/user-attachments/assets/fc5f0fce-f254-4572-b2a7-dd5f87c6ce52" />
+<img width="866" height="471" alt="image" src="https://github.com/user-attachments/assets/aa89b90b-f1e2-4df3-b701-3ca9a76bd837" />
+
 
 a neofetch-like software written in rust!
 
