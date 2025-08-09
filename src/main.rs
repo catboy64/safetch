@@ -103,28 +103,34 @@ fn i_love_numbers(content: String) -> String {
     result
 }
 
-fn separator(place:u8) -> String {
+fn separator(place:u8, border_custom: String) -> String {
     let length = 10;
     let mut bar = String::from("");
+    let border_characters: [&str; 7] =  match border_custom.as_str() {
+        "round"  => ["╭", "─", "╮", "├", "┤", "╰", "╯"],
+        "square" => ["┌", "─", "┐", "├", "┤", "└", "┘"],
+        "none"   => [" ", " ", " ", " ", " ", " ", " "],
+        _        => ["╭", "─", "╮", "├", "┤", "╰", "╯"]
+    };
     bar.push_str("\x1b[0m");
     return match place {
-        0 => {bar.push_str("╭");
+        0 => {bar.push_str(border_characters[0]);
         for _x in 0..length-1 {
-            bar.push_str("─");
+            bar.push_str(border_characters[1]);
         }
-        bar.push_str("╮");
+        bar.push_str(border_characters[2]);
         bar},
-        1 => {bar.push_str("├");
+        1 => {bar.push_str(border_characters[3]);
         for _x in 0..length-1 {
-            bar.push_str("─");
+            bar.push_str(border_characters[1]);
         }
-        bar.push_str("┤");
+        bar.push_str(border_characters[4]);
         bar},
-        2 => {bar.push_str("╰");
+        2 => {bar.push_str(border_characters[5]);
         for _x in 0..length-1 {
-            bar.push_str("─");
+            bar.push_str(border_characters[1]);
         }
-        bar.push_str("╯");
+        bar.push_str(border_characters[6]);
         bar},
         _ => String::from("Nothing ever happens."),
     };
@@ -152,9 +158,39 @@ fn get_mem_used(mem_total: String, mem_avail: String) -> String {
 fn main() {
     let username = env::var("LOGNAME").unwrap();
 
+    //load config file
+    let config_file_path: &str = &("/home/".to_owned() + &username + "/.config/safetch.conf");
+    let mut ascii_custom = String::new();
+    let mut border_custom = String::new();
+    if check_if_file_exist(config_file_path) {
+        ascii_custom = conf_parse("ascii", config_file_path);
+        border_custom = conf_parse("border", config_file_path);
+    } else {
+        let _  = create_config_file(config_file_path);
+    }
+
     let os_name = better_parse(read_file("/etc/os-release"), "PRETTY_NAME");
-    let os_id = better_parse(read_file("/etc/os-release"), "ID");
-    //let os_id = String::from("qubes"); // for testing purposes.
+
+    let os_id = match ascii_custom.as_str() {
+        "distro" => better_parse(read_file("/etc/os-release"), "ID"),
+        "arch" => String::from("arch"),
+        "debian" => String::from("debian"),
+        "linuxmint" => String::from("linuxmint"),
+        "kali" => String::from("kali"),
+        "fedora" => String::from("fedora"),
+        "manjaro" => String::from("manjaro"),
+        "ubuntu" => String::from("ubuntu"),
+        "slackware" => String::from("slackware"),
+        "paran" => String::from("paran"),
+        "gentoo" => String::from("gentoo"),
+        "nixos" => String::from("nixos"),
+        "opensuse" => String::from("opensuse"),
+        "endeavouros" => String::from("endeavouros"),
+        "trisquel" => String::from("trisquel"),
+        "void" => String::from("void"),
+        "qubes" => String::from("qubes"),
+        &_ => better_parse(read_file("/etc/os-release"), "ID")
+    };
 
     let distro_color: String =  match os_id.as_str() {
         "arch" => format!("{CYAN}"),
@@ -173,7 +209,7 @@ fn main() {
         "trisquel" => format!("{CYAN}"),
         "void" => format!("{GREEN}"),
         "qubes" => format!("{BLUE}"),
-        &_ => format!("{COLOR_END}"),
+        &_ => format!("{COLOR_END}")
     };
 
     // hostname 
@@ -209,18 +245,24 @@ fn main() {
     mem_used = convert_memory(mem_used, "mib");
 
 
-    print_info(username, hostname, os_name, os_id, distro_color, kernel_version, uptime_str, current_desktop, cpu_model_name, mem_total, mem_used);
+    print_info(username, hostname, os_name, os_id, distro_color, kernel_version, uptime_str, current_desktop, cpu_model_name, mem_total, mem_used, border_custom);
 
 }
 
-fn create_line(info_name: &str, info: String, distro_color: String) -> String {
+fn create_line(info_name: &str, info: String, distro_color: String, border_custom: String) -> String {
     let mut line = String::from(info_name);
-    line = "│ ".to_owned() + &distro_color + &line + COLOR_END + "│  " + &info;
+
+    let vertical_char: &str = match border_custom.as_str() {
+        "none" => " ",
+        _      => "│"
+    };
+
+    line = vertical_char.to_owned() + " " + &distro_color + &line + COLOR_END + vertical_char + "  " + &info;
     line
 }
 
 
-fn print_info(username:String, hostname:String, os_name:String, os_id:String, distro_color:String, kernel_version:String, uptime_str:String, current_desktop:String, cpu_model_name:String, mem_total:String, mem_avail:String) {
+fn print_info(username:String, hostname:String, os_name:String, os_id:String, distro_color:String, kernel_version:String, uptime_str:String, current_desktop:String, cpu_model_name:String, mem_total:String, mem_avail:String, border_custom:String) {
 
     let binding = os_id.clone();
     let ascii = ascii::get_ascii(&binding);
@@ -229,45 +271,44 @@ fn print_info(username:String, hostname:String, os_name:String, os_id:String, di
     
     vec.push(String::from(""));
 
-    vec.push(separator(0));
+    vec.push(separator(0, border_custom.clone()));
     let color_line = format!("{BLACK}⬤ {RED} ⬤ {GREEN} ⬤ {YELLOW} ⬤ {BLUE} ⬤ {PURPLE} ⬤ {CYAN} ⬤ {WHITE} ⬤ {COLOR_END}");
 
     if username != empty {
-        vec.push(create_line("User    ", username, distro_color.clone()));
+        vec.push(create_line("User    ", username, distro_color.clone(), border_custom.clone()));
     }
     if hostname != empty {
-        vec.push(create_line("Host    ", hostname, distro_color.clone()));
+        vec.push(create_line("Host    ", hostname, distro_color.clone(), border_custom.clone()));
     }
 
-    vec.push(separator(1));
+    vec.push(separator(1, border_custom.clone()));
 
     
 
     if os_name != empty {
-            vec.push(create_line("OS      ", os_name, distro_color.clone()));
+            vec.push(create_line("OS      ", os_name, distro_color.clone(), border_custom.clone()));
     }
     if kernel_version != empty {
-            vec.push(create_line("Kernel  ", kernel_version, distro_color.clone()));
+            vec.push(create_line("Kernel  ", kernel_version, distro_color.clone(), border_custom.clone()));
     }
     if uptime_str != empty {
-            vec.push(create_line("Uptime  ", uptime_str, distro_color.clone()));
+            vec.push(create_line("Uptime  ", uptime_str, distro_color.clone(), border_custom.clone()));
     }
     if current_desktop != empty {
-            vec.push(create_line("DE      ", current_desktop, distro_color.clone()));
+            vec.push(create_line("DE      ", current_desktop, distro_color.clone(), border_custom.clone()));
     }
     if cpu_model_name != empty {
-            vec.push(create_line("CPU     ", cpu_model_name, distro_color.clone()));
+            vec.push(create_line("CPU     ", cpu_model_name, distro_color.clone(), border_custom.clone()));
     }
 
-    let mut mem_line = format!("{distro_color}Mem{COLOR_END}     │  ");
-    mem_line = "│ ".to_owned() + &mem_line + COLOR_END + &mem_avail + "/" + &mem_total + " MiB";
-    vec.push(mem_line.clone());
+    //todo
+    let mem_line = mem_avail + "/" + &mem_total + " MiB";
+    vec.push(create_line("Mem     ", mem_line, distro_color.clone(), border_custom.clone()));
 
-    vec.push(separator(1));
 
-    vec.push(create_line("Colors  ", color_line, distro_color.clone()));
-    
-    vec.push(separator(2));
+    vec.push(separator(1, border_custom.clone()));
+    vec.push(create_line("Colors  ", color_line, distro_color.clone(), border_custom.clone()));
+    vec.push(separator(2, border_custom.clone()));
 
     let vec_length = vec.len();
     //let ascii_line_length = ascii.lines().count();
@@ -283,4 +324,58 @@ fn print_info(username:String, hostname:String, os_name:String, os_id:String, di
         counter+=1;
     }
     println!("{COLOR_END}");
+}
+
+fn create_config_file(config_file_path: &str) -> std::io::Result<()> {
+    use std::fs::File;
+    use std::io::Write;
+    let config_file_content = "
+#ascii (default=distro)
+ascii=distro
+#border [round, square, none] (default=round)
+border=round
+
+";
+    let mut config_file = File::create_new(config_file_path)?;
+    config_file.write_all(config_file_content.as_bytes())?;
+
+    Ok(())
+}
+
+fn conf_parse(info_title:&str, conf_file_path: &str) -> String {
+    use std::fs;
+
+    let content =  match fs::read_to_string(conf_file_path) {
+        Ok(x) => x,
+        Err(_) => String::from(""),
+    };
+    
+    if content != String::from("") {
+        for line in content.lines() {
+            if line != "" {
+                if line.chars().nth(0).unwrap() != '#' {
+                    let line_vector: Vec<&str> = line.split('=').collect();
+                    if line_vector[0] == info_title {
+                        let info = format!("{}", line_vector[1]);
+                        return info;
+                    }   
+                }
+            }
+        }
+    return String::from("default");
+    } else {
+        return String::from("default");
+    }
+
+}
+
+fn check_if_file_exist(file_path: &str) -> bool {
+    use std::path::Path;
+
+    let path = Path::new(file_path);
+    if path.exists() {
+        return true;
+    } else {
+        return false;
+    }
 }
