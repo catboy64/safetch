@@ -103,7 +103,7 @@ fn i_love_numbers(content: String) -> String {
     result
 }
 
-fn separator(place:u8, border_custom: String) -> String {
+fn separator(place:u8, border_custom: String, border_color_code: &str) -> String {
     let length = 10;
     let mut bar = String::from("");
     let border_characters: [&str; 7] =  match border_custom.as_str() {
@@ -112,25 +112,25 @@ fn separator(place:u8, border_custom: String) -> String {
         "none"   => [" ", " ", " ", " ", " ", " ", " "],
         _        => ["╭", "─", "╮", "├", "┤", "╰", "╯"]
     };
-    bar.push_str("\x1b[0m");
+    bar.push_str(border_color_code);
     return match place {
         0 => {bar.push_str(border_characters[0]);
         for _x in 0..length-1 {
             bar.push_str(border_characters[1]);
         }
-        bar.push_str(border_characters[2]);
+        bar.push_str(border_characters[2]);bar.push_str("\x1b[0m");
         bar},
         1 => {bar.push_str(border_characters[3]);
         for _x in 0..length-1 {
             bar.push_str(border_characters[1]);
         }
-        bar.push_str(border_characters[4]);
+        bar.push_str(border_characters[4]);bar.push_str("\x1b[0m");
         bar},
         2 => {bar.push_str(border_characters[5]);
         for _x in 0..length-1 {
             bar.push_str(border_characters[1]);
         }
-        bar.push_str(border_characters[6]);
+        bar.push_str(border_characters[6]);bar.push_str("\x1b[0m");
         bar},
         _ => String::from("Nothing ever happens."),
     };
@@ -156,21 +156,31 @@ fn get_mem_used(mem_total: String, mem_avail: String) -> String {
 }
 
 fn main() {
+    use std::path::Path;
     let username = env::var("LOGNAME").unwrap();
 
     //load config file
-    let config_file_path: &str = &("/home/".to_owned() + &username + "/.config/safetch.conf");
+    let config_path: &str = &("/home/".to_owned() + &username + "/.config/");
+    let config_file_path: &str = &(config_path.to_owned() + "safetch.conf");
     let mut ascii_custom = String::new();
     let mut border_custom = String::new();
-    if check_if_file_exist(config_file_path) {
+    let mut border_color = String::new();
+    let mut infotitle_color = String::new();
+    let path = Path::new(config_file_path);
+    
+    if path.exists() {
         ascii_custom = conf_parse("ascii", config_file_path);
         border_custom = conf_parse("border", config_file_path);
+        border_color = conf_parse("border-color", config_file_path);
+        infotitle_color = conf_parse("info-title-color", config_file_path);
     } else {
-        let _  = create_config_file(config_file_path);
+        let _  = create_config_file(config_path);
     }
 
     let os_name = better_parse(read_file("/etc/os-release"), "PRETTY_NAME");
 
+
+    // change this
     let os_id = match ascii_custom.as_str() {
         "distro" => better_parse(read_file("/etc/os-release"), "ID"),
         "arch" => String::from("arch"),
@@ -189,27 +199,38 @@ fn main() {
         "trisquel" => String::from("trisquel"),
         "void" => String::from("void"),
         "qubes" => String::from("qubes"),
+        "custom" => String::from("custom"),
         &_ => better_parse(read_file("/etc/os-release"), "ID")
     };
 
-    let distro_color: String =  match os_id.as_str() {
-        "arch" => format!("{CYAN}"),
-        "debian" => format!("{RED}"),
-        "linuxmint" => format!("{GREEN}"),
-        "kali" => format!("{BLUE}"),
-        "fedora" => format!("{BLUE}"),
-        "manjaro" => format!("{GREEN}"),
-        "ubuntu" => format!("{RED}"),
-        "slackware" => format!("{BLUE}"),
-        "paran" => format!("{PURPLE}"),
-        "gentoo" => format!("{PURPLE}"),
-        "nixos" => format!("{CYAN}"),
-        "opensuse" => format!("{GREEN}"),
-        "endeavouros" => format!("{PURPLE}"),
-        "trisquel" => format!("{CYAN}"),
-        "void" => format!("{GREEN}"),
-        "qubes" => format!("{BLUE}"),
-        &_ => format!("{COLOR_END}")
+    let distro_color: String = match infotitle_color.as_str() {
+        "black" => format!("{BLACK}"),
+        "red" => format!("{RED}"),
+        "green" => format!("{GREEN}"),
+        "yellow" => format!("{YELLOW}"),
+        "blue" => format!("{BLUE}"),
+        "purple" => format!("{PURPLE}"),
+        "cyan" => format!("{CYAN}"),
+        "white" => format!("{WHITE}"),
+        _ =>     match os_id.as_str() {
+                            "arch" => format!("{CYAN}"),
+                            "debian" => format!("{RED}"),
+                            "linuxmint" => format!("{GREEN}"),
+                            "kali" => format!("{BLUE}"),
+                            "fedora" => format!("{BLUE}"),
+                            "manjaro" => format!("{GREEN}"),
+                            "ubuntu" => format!("{RED}"),
+                            "slackware" => format!("{BLUE}"),
+                            "paran" => format!("{PURPLE}"),
+                            "gentoo" => format!("{PURPLE}"),
+                            "nixos" => format!("{CYAN}"),
+                            "opensuse" => format!("{GREEN}"),
+                            "endeavouros" => format!("{PURPLE}"),
+                            "trisquel" => format!("{CYAN}"),
+                            "void" => format!("{GREEN}"),
+                            "qubes" => format!("{BLUE}"),
+                            &_ => format!("{COLOR_END}")
+                        }
     };
 
     // hostname 
@@ -244,12 +265,12 @@ fn main() {
     mem_total = convert_memory(mem_total, "mib");
     mem_used = convert_memory(mem_used, "mib");
 
-
-    print_info(username, hostname, os_name, os_id, distro_color, kernel_version, uptime_str, current_desktop, cpu_model_name, mem_total, mem_used, border_custom);
+    
+    print_info(username, hostname, os_name, os_id, distro_color, kernel_version, uptime_str, current_desktop, cpu_model_name, mem_total, mem_used, border_custom ,config_path.to_owned() + "safetch_custom.ascii", border_color);
 
 }
 
-fn create_line(info_name: &str, info: String, distro_color: String, border_custom: String) -> String {
+fn create_line(info_name: &str, info: String, distro_color: String, border_custom: String, border_color_code: &str) -> String {
     let mut line = String::from(info_name);
 
     let vertical_char: &str = match border_custom.as_str() {
@@ -257,87 +278,172 @@ fn create_line(info_name: &str, info: String, distro_color: String, border_custo
         _      => "│"
     };
 
-    line = vertical_char.to_owned() + " " + &distro_color + &line + COLOR_END + vertical_char + "  " + &info;
+    line = border_color_code.to_owned() + vertical_char + COLOR_END + " " + &distro_color + &line + border_color_code + vertical_char + COLOR_END + "  " + &info;
     line
 }
 
 
-fn print_info(username:String, hostname:String, os_name:String, os_id:String, distro_color:String, kernel_version:String, uptime_str:String, current_desktop:String, cpu_model_name:String, mem_total:String, mem_avail:String, border_custom:String) {
+fn print_info(username:String, hostname:String, os_name:String, os_id:String, distro_color:String, kernel_version:String, uptime_str:String, current_desktop:String, cpu_model_name:String, mem_total:String, mem_avail:String, border_custom:String, custom_ascii_path:String, border_color:String) {
 
     let binding = os_id.clone();
-    let ascii = ascii::get_ascii(&binding);
+    
+    let ascii: String;
+
+    let binding2 = get_color_code(border_color);
+    let border_color_code = binding2.as_str();
+
+    if &binding == "custom" {
+        ascii = read_file(custom_ascii_path.as_str()).as_str()
+                .replace("{BLACK}", BLACK)
+                .replace("{RED}", RED)
+                .replace("{GREEN}", GREEN)
+                .replace("{YELLOW}", YELLOW)
+                .replace("{BLUE}", BLUE)
+                .replace("{PURPLE}", PURPLE)
+                .replace("{CYAN}", CYAN)
+                .replace("{WHITE}", WHITE)
+                .replace("{END}", COLOR_END);
+    } else {
+        ascii = ascii::get_ascii(&binding);
+    }
+
     let empty = String::from("");
     let mut vec = Vec::new();
     
     vec.push(String::from(""));
 
-    vec.push(separator(0, border_custom.clone()));
+    vec.push(separator(0, border_custom.clone(), border_color_code));
     let color_line = format!("{BLACK}⬤ {RED} ⬤ {GREEN} ⬤ {YELLOW} ⬤ {BLUE} ⬤ {PURPLE} ⬤ {CYAN} ⬤ {WHITE} ⬤ {COLOR_END}");
 
     if username != empty {
-        vec.push(create_line("User    ", username, distro_color.clone(), border_custom.clone()));
+        vec.push(create_line("User    ", username, distro_color.clone(), border_custom.clone(), border_color_code));
     }
     if hostname != empty {
-        vec.push(create_line("Host    ", hostname, distro_color.clone(), border_custom.clone()));
+        vec.push(create_line("Host    ", hostname, distro_color.clone(), border_custom.clone(), border_color_code));
     }
 
-    vec.push(separator(1, border_custom.clone()));
+    vec.push(separator(1, border_custom.clone(), border_color_code));
 
-    
 
     if os_name != empty {
-            vec.push(create_line("OS      ", os_name, distro_color.clone(), border_custom.clone()));
+            vec.push(create_line("OS      ", os_name, distro_color.clone(), border_custom.clone(), border_color_code));
     }
     if kernel_version != empty {
-            vec.push(create_line("Kernel  ", kernel_version, distro_color.clone(), border_custom.clone()));
+            vec.push(create_line("Kernel  ", kernel_version, distro_color.clone(), border_custom.clone(), border_color_code));
     }
     if uptime_str != empty {
-            vec.push(create_line("Uptime  ", uptime_str, distro_color.clone(), border_custom.clone()));
+            vec.push(create_line("Uptime  ", uptime_str, distro_color.clone(), border_custom.clone(), border_color_code));
     }
     if current_desktop != empty {
-            vec.push(create_line("DE      ", current_desktop, distro_color.clone(), border_custom.clone()));
+            vec.push(create_line("DE      ", current_desktop, distro_color.clone(), border_custom.clone(), border_color_code));
     }
     if cpu_model_name != empty {
-            vec.push(create_line("CPU     ", cpu_model_name, distro_color.clone(), border_custom.clone()));
+            vec.push(create_line("CPU     ", cpu_model_name, distro_color.clone(), border_custom.clone(), border_color_code));
+    }
+    if mem_avail != empty && mem_total != empty {
+        let mem_line = mem_avail + "/" + &mem_total + " MiB";
+        vec.push(create_line("Mem     ", mem_line, distro_color.clone(), border_custom.clone(), border_color_code));
     }
 
-    //todo
-    let mem_line = mem_avail + "/" + &mem_total + " MiB";
-    vec.push(create_line("Mem     ", mem_line, distro_color.clone(), border_custom.clone()));
-
-
-    vec.push(separator(1, border_custom.clone()));
-    vec.push(create_line("Colors  ", color_line, distro_color.clone(), border_custom.clone()));
-    vec.push(separator(2, border_custom.clone()));
+    vec.push(separator(1, border_custom.clone(), border_color_code));
+    vec.push(create_line("Colors  ", color_line, distro_color.clone(), border_custom.clone(), border_color_code));
+    vec.push(separator(2, border_custom.clone(), border_color_code));
 
     let vec_length = vec.len();
-    //let ascii_line_length = ascii.lines().count();
-    
+    let ascii_length = ascii.lines().count();
     let mut counter = 0;
+    
+    // where everything is printed !!!
+    if ascii_length > vec_length {
+        for x in ascii.lines() {
 
-    for x in ascii.lines() {
-        if counter < vec_length {
-                println!("{x}{}",vec[counter]);
-        } else {
-            println!("{x}");
+            if counter < vec_length {
+                    println!("{x}{}",vec[counter]);
+            } else {
+                println!("{x}");
+            }
+            counter+=1;
         }
-        counter+=1;
+    } else {
+        let mut space = String::new();
+        for x in ascii.lines() {
+
+            if counter == 1 {
+                space = line_space(x);
+            }
+            println!("{x}{}", vec[counter]);
+            counter+=1;
+        }
+        while counter < vec_length {
+            println!("{space}{}", vec[counter]);
+            counter+=1;
+        }
     }
     println!("{COLOR_END}");
 }
 
-fn create_config_file(config_file_path: &str) -> std::io::Result<()> {
+fn create_config_file(config_path: &str) -> std::io::Result<()> {
     use std::fs::File;
     use std::io::Write;
     let config_file_content = "
-#ascii (default=distro)
+# ascii ([distro, <distro_name>, custom, random], default=distro)'
+# if you set 'custom' for ascii, you can set your ascii in safetch_custom.ascii
+# to add color to your custom ascii, write {<COLOR_NAME>} and {END} to switch to normal color
+# available colors: [BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE]
 ascii=distro
-#border [round, square, none] (default=round)
+
+# border [round, square, none] (default=round)
 border=round
 
+# border color [default, black, red, green, yellow, blue, purple, cyan, white]
+border-color=default
+
+# info title color [distro, black, red, green, yellow, blue, purple, cyan, white] (default=distro)
+info-title-color=distro
 ";
+let custom_ascii_content = "
+                       .,,uod8B8bou,,.              
+              ..,uod8BBBBBBBBBBBBBBBBRPFT?l!i:.     
+         ,=m8BBBBBBBBBBBBBBBRPFT?!||||||||||||||    
+         !...:!TVBBBRPFT||||||||||!!^^\"\"'   ||||    
+         !.......:!?|||||!!^^\"\"'            ||||    
+         !.........||||                     ||||    
+         !.........|||| {GREEN}~${END}                  ||||    
+         !.........||||                     ||||    
+         !.........||||                     ||||    
+         !.........||||                     ||||    
+         !.........||||                     ||||    
+         `.........||||                    ,||||    
+          .;.......||||               _.-!!|||||    
+   .,uodWBBBBb.....||||       _.-!!|||||||||!:'     
+!YBBBBBBBBBBBBBBb..!|||:..-!!|||||||!iof68BBBBBb....                    
+!..YBBBBBBBBBBBBBBb!!||||||||!iof68BBBBBBRPFT?!::   `.                  
+!....YBBBBBBBBBBBBBBbaaitf68BBBBBBRPFT?!:::::::::     `.                
+!......YBBBBBBBBBBBBBBBBBBBRPFT?!::::::;:!^\"`;:::       `.              
+!........YBBBBBBBBBBRPFT?!::::::::::^''...::::::;         iBBbo.        
+`..........YBRPFT?!::::::::::::::::::::::::;iof68bo.      WBBBBbo.      
+  `..........:::::::::::::::::::::::;iof688888888888b.     `YBBBP^'     
+    `........::::::::::::::::;iof688888888888888888888b.     `          
+      `......:::::::::;iof688888888888888888888888888888b.              
+        `....:::;iof688888888888888888888888888888888899fT!             
+          `..::!8888888888888888888888888888888899fT|!^\"'               
+            `' !!988888888888888888888888899fT|!^\"'                     
+                `!!8888888888888888899fT|!^\"'                           
+                  `!988888888899fT|!^\"'                                 
+                    `!9899fT|!^\"'                                       
+                      `!^\"'                                             
+";
+
+
+    let config_file_path: &str = &(config_path.to_owned() + "safetch.conf");
+    let custom_ascii_path: &str = &(config_path.to_owned()  + "safetch_custom.ascii");
+    
     let mut config_file = File::create_new(config_file_path)?;
     config_file.write_all(config_file_content.as_bytes())?;
+
+    let mut custom_ascii_file = File::create_new(custom_ascii_path)?;
+    custom_ascii_file.write_all(custom_ascii_content.as_bytes())?;
+
 
     Ok(())
 }
@@ -368,14 +474,38 @@ fn conf_parse(info_title:&str, conf_file_path: &str) -> String {
     }
 
 }
-
-fn check_if_file_exist(file_path: &str) -> bool {
-    use std::path::Path;
-
-    let path = Path::new(file_path);
-    if path.exists() {
-        return true;
-    } else {
-        return false;
+fn line_space(line: &str) -> String {
+    let mut space = String::new();
+    let mut ignore = false;
+    for x in line.chars() {
+        if ignore == false {
+            if x == '\x1b' {
+                ignore = true;
+            } else {
+                space.push(' ');
+            }
+        } else {
+            if x == 'm' {
+                ignore = false;
+            }
+        }
     }
+    return space;
+}
+
+
+fn get_color_code(color: String) -> String {
+    let ascii_color_code = match color.as_str() {
+        "default" => format!("{COLOR_END}"),
+        "black" => format!("{BLACK}"),
+        "red" => format!("{RED}"),
+        "green" => format!("{GREEN}"),
+        "yellow" => format!("{YELLOW}"),
+        "blue" => format!("{BLUE}"),
+        "purple" => format!("{PURPLE}"),
+        "cyan" => format!("{CYAN}"),
+        "white" => format!("{WHITE}"),
+        _     => format!("{COLOR_END}"),
+    };
+    return ascii_color_code
 }

@@ -12,6 +12,7 @@ const COLOR_END: &str = "\x1b[0m";
 pub fn get_ascii(os_id: &str) -> String {
     // returns the appropriate ascii, acording to os_name, might need to replace os_name by id
     match os_id {
+
         "arch"    => return format!("                                       
                    {CYAN}-`                  {COLOR_END}
                   {CYAN}.o+`                 {COLOR_END}
@@ -191,9 +192,6 @@ pub fn get_ascii(os_id: &str) -> String {
 {PURPLE} / / /          {COLOR_END}
 {PURPLE}/ / /           {COLOR_END}
 {PURPLE}\\/_/            {COLOR_END}
-                {COLOR_END}
-                {COLOR_END}
-                {COLOR_END}
 "),
       "gentoo" => return format!("
 {PURPLE}         -/oyddmdhs+:.               {COLOR_END}
