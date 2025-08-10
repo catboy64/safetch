@@ -194,7 +194,7 @@ fn main() {
         "paran" => String::from("paran"),
         "gentoo" => String::from("gentoo"),
         "nixos" => String::from("nixos"),
-        "opensuse" => String::from("opensuse"),
+        "opensuse" | "opensuse-leap" | "opensuse-tumbleweed" => String::from("opensuse"),
         "endeavouros" => String::from("endeavouros"),
         "trisquel" => String::from("trisquel"),
         "void" => String::from("void"),
