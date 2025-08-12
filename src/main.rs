@@ -12,7 +12,6 @@ const CYAN: &str = "\x1b[1;36m";
 const WHITE: &str = "\x1b[1;37m";
 const COLOR_END: &str = "\x1b[0m";
 
-
 fn read_file(path:&str) -> String {
     // return the content of a file
     use std::fs;
@@ -64,8 +63,6 @@ fn parse_content_with_end_char(content: String, starting_point: i8, starting_cha
     }
     panic!("Error: couldn't parse content. (fn:parse_content_with_end_char)");
 }
-
-
 fn better_parse(content:String, info_title:&str) -> String {
     for line in content.lines() {
         let line_vector: Vec<&str> = line.split('=').collect();
@@ -238,32 +235,6 @@ let custom_ascii_content = "
     Ok(())
 }
 
-fn conf_parse(info_title:&str, conf_file_path: &str) -> String {
-    use std::fs;
-
-    let content =  match fs::read_to_string(conf_file_path) {
-        Ok(x) => x,
-        Err(_) => String::from(""),
-    };
-    
-    if content != String::from("") {
-        for line in content.lines() {
-            if line != "" {
-                if line.chars().nth(0).unwrap() != '#' {
-                    let line_vector: Vec<&str> = line.split('=').collect();
-                    if line_vector[0] == info_title {
-                        let info = format!("{}", line_vector[1]);
-                        return info;
-                    }   
-                }
-            }
-        }
-    return String::from("default");
-    } else {
-        return String::from("default");
-    }
-
-}
 fn line_space(line: &str) -> String {
     let mut space = String::new();
     let mut ignore = false;
@@ -302,12 +273,16 @@ fn get_color_code(color: String) -> String {
 
 
 fn main() {
-    use std::path::Path;
-    let username = env::var("LOGNAME").unwrap();
 
+    use std::path::Path;
     //load config file
-    let config_path: &str = &("/home/".to_owned() + &username + "/.config/");
+
+    let username = env::var("LOGNAME").unwrap();
+    let home_path = env::var("HOME").unwrap();
+    let config_path: &str = &(home_path.to_owned() + "/.config/");
     let config_file_path: &str = &(config_path.to_owned() + "safetch.conf");
+
+    // conf variables
     let mut ascii_custom = String::new();
     let mut border_custom = String::new();
     let mut border_color = String::new();
@@ -316,16 +291,38 @@ fn main() {
     let path = Path::new(config_file_path);
     
     if path.exists() {
-        ascii_custom = conf_parse("ascii", config_file_path);
-        border_custom = conf_parse("border", config_file_path);
-        border_color = conf_parse("border-color", config_file_path);
-        infotitle_color = conf_parse("info-title-color", config_file_path);
-        mem_unity = conf_parse("mem_unity", config_file_path);
+        use std::fs;
+
+        let content =  match fs::read_to_string(config_file_path) {
+            Ok(x) => x,
+            Err(_) => String::from(""),
+        };
+        
+        if content != String::from("") {
+            for line in content.lines() {
+                if line != "" {
+                    if line.chars().nth(0).unwrap() != '#' {
+                        let line_vector: Vec<&str> = line.split('=').collect();
+
+                        match line_vector[0] {
+                            "ascii" => {ascii_custom = format!("{}", line_vector[1])},
+                            "border" => {border_custom = format!("{}", line_vector[1])},
+                            "border-color" => {border_color = format!("{}", line_vector[1])},
+                            "info-title-color" => {infotitle_color = format!("{}", line_vector[1])},
+                            "mem_unity" => {mem_unity = format!("{}", line_vector[1])},
+                            &_ => {},
+                            }
+
+                    }
+                }
+            }
+        }
     } else {
         let _  = create_config_file(config_path);
-    }
+        }
 
     let os_name = better_parse(read_file("/etc/os-release"), "PRETTY_NAME");
+
 
 
     // change this
@@ -347,6 +344,7 @@ fn main() {
         "trisquel" => String::from("trisquel"),
         "void" => String::from("void"),
         "qubes" => String::from("qubes"),
+        "artix" => String::from("artix"),
         "custom" => String::from("custom"),
         &_ => better_parse(read_file("/etc/os-release"), "ID")
     };
@@ -377,6 +375,7 @@ fn main() {
                             "trisquel" => format!("{CYAN}"),
                             "void" => format!("{GREEN}"),
                             "qubes" => format!("{BLUE}"),
+                            "artix" => format!("{CYAN}"),
                             &_ => format!("{COLOR_END}")
                         }
     };

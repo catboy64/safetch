@@ -335,6 +335,27 @@ pub fn get_ascii(os_id: &str) -> String {
 {BLUE}            `.:////ssss+/+ssssssssssss.   {COLOR_END}
 {BLUE}                `--//-    `-/osssso/.     {COLOR_END}"),
 
+      "artix" => return format!("
+{CYAN}                  'o'                  {COLOR_END}
+{CYAN}                 'ooo'                 {COLOR_END}
+{CYAN}                'ooxoo'                {COLOR_END}
+{CYAN}               'ooxxxoo'               {COLOR_END}
+{CYAN}              'oookkxxoo'              {COLOR_END}
+{CYAN}             'oiioxkkxxoo'             {COLOR_END}
+{CYAN}            ':;:iiiioxxxoo'            {COLOR_END}
+{CYAN}               `'.;::ioxxoo'           {COLOR_END}
+{CYAN}          '-.      `':;jiooo'          {COLOR_END}
+{CYAN}         'oooio-..     `'i:io'         {COLOR_END}
+{CYAN}        'ooooxxxxoio:,.   `'-;'        {COLOR_END}
+{CYAN}       'ooooxxxxxkkxoooIi:-.  `'       {COLOR_END}
+{CYAN}      'ooooxxxxxkkkkxoiiiiiji'         {COLOR_END}
+{CYAN}     'ooooxxxxxkxxoiiii:'`     .i'     {COLOR_END}
+{CYAN}    'ooooxxxxxoi:::'`       .;ioxo'    {COLOR_END}
+{CYAN}   'ooooxooi::'`         .:iiixkxxo'   {COLOR_END}
+{CYAN}  'ooooi:'`                `'';ioxxo'  {COLOR_END}
+{CYAN} 'i:'`                          '':io' {COLOR_END}
+{CYAN}'`                                   `'{COLOR_END}"),
+
 
         _       => return String::from("distro not supported (yet)"),
     }
