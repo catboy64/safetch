@@ -277,7 +277,8 @@ fn main() {
     use std::path::Path;
     //load config file
 
-    let username = env::var("LOGNAME").unwrap();
+    let username = env::var("LOGNAME")
+        .unwrap_or_else(|_| env::var("USER").unwrap());
     let home_path = env::var("HOME").unwrap();
     let config_path: &str = &(home_path.to_owned() + "/.config/");
     let config_file_path: &str = &(config_path.to_owned() + "safetch.conf");
